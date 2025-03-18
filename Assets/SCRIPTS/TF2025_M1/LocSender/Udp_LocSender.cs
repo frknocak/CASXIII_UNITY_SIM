@@ -4,18 +4,31 @@
 //using System.Net.Sockets;
 //using System.Text;
 //using UnityEngine;
+//using System.Collections;
+
 //public class Udp_LocSender : MonoBehaviour
 //{
 //    public GameObject startingBuoy;
 //    public GameObject targetBuoy;
 //    private UdpClient udpClient;
 //    private IPEndPoint targetEndPoint;
+//    public GameObject rov;
+//    public float sendInterval = 0.1f; // Veri gönderme aralýðý
 
 //    private void Start()
 //    {
 //        udpClient = new UdpClient();
 //        targetEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 54321); // Python'a göndereceðimiz IP ve port
-//        InvokeRepeating("SendTargetPosition", 0f, 0.1f); // 0.1 saniyede bir veri yolla
+//        StartCoroutine(SendTargetPositionCoroutine());
+//    }
+
+//    private IEnumerator SendTargetPositionCoroutine()
+//    {
+//        while (true) // Sürekli çalýþacak bir döngü
+//        {
+//            SendTargetPosition();
+//            yield return new WaitForSeconds(sendInterval); // Belirtilen aralýkta bekle
+//        }
 //    }
 
 //    private void SendTargetPosition()
@@ -29,7 +42,8 @@
 //        }
 
 //        // KÜLTÜR AYARINI ZORUNLU NOKTA (.) OLACAK ÞEKÝLDE BELÝRLE
-//        string message = string.Format(CultureInfo.InvariantCulture, "{0},{1}", targetPos[0], targetPos[1]);
+//        string message = string.Format(CultureInfo.InvariantCulture, "{0},{1}",
+//            targetPos[0], targetPos[1]);
 //        byte[] data = Encoding.UTF8.GetBytes(message);
 
 //        udpClient.Send(data, data.Length, targetEndPoint);
@@ -40,6 +54,7 @@
 //    {
 //        float x_val = targetBuoy.transform.position.x - startingBuoy.transform.position.x;
 //        float y_val = targetBuoy.transform.position.z - startingBuoy.transform.position.z; // Y ekseni yerine Z kullanýlýyor
+
 //        Debug.Log($"Gönderilen pozisyon: {{{x_val}, {y_val}}}");
 
 //        return new float[] { x_val, y_val };
@@ -48,8 +63,10 @@
 //    private void OnApplicationQuit()
 //    {
 //        udpClient.Close(); // Uygulama kapanýnca baðlantýyý kapat
+//        StopCoroutine(SendTargetPositionCoroutine()); // Coroutine'i durdur
 //    }
 //}
+
 
 using System;
 using System.Globalization;
@@ -61,11 +78,10 @@ using System.Collections;
 
 public class Udp_LocSender : MonoBehaviour
 {
-    public GameObject startingBuoy;
+    public GameObject rov;
     public GameObject targetBuoy;
     private UdpClient udpClient;
     private IPEndPoint targetEndPoint;
-    public GameObject rov;
     public float sendInterval = 0.1f; // Veri gönderme aralýðý
 
     private void Start()
@@ -94,7 +110,6 @@ public class Udp_LocSender : MonoBehaviour
             return;
         }
 
-        // KÜLTÜR AYARINI ZORUNLU NOKTA (.) OLACAK ÞEKÝLDE BELÝRLE
         string message = string.Format(CultureInfo.InvariantCulture, "{0},{1}",
             targetPos[0], targetPos[1]);
         byte[] data = Encoding.UTF8.GetBytes(message);
@@ -105,10 +120,12 @@ public class Udp_LocSender : MonoBehaviour
 
     private float[] LocSender()
     {
-        float x_val = targetBuoy.transform.position.x - startingBuoy.transform.position.x;
-        float y_val = targetBuoy.transform.position.z - startingBuoy.transform.position.z; // Y ekseni yerine Z kullanýlýyor
+        Vector3 origin = rov.transform.position;
 
-        Debug.Log($"Gönderilen pozisyon: {{{x_val}, {y_val}}}");
+        float x_val = targetBuoy.transform.position.x - origin.x;
+        float y_val = targetBuoy.transform.position.z - origin.z; // Y ekseni yerine Z kullanýlýyor
+
+        Debug.Log($"Gönderilen pozisyon (Yeni Orijin - Araç): {{{x_val}, {y_val}}}");
 
         return new float[] { x_val, y_val };
     }
