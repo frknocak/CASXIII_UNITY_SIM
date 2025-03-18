@@ -1,0 +1,54 @@
+{
+    "name": "JoystickController",
+    "maps": [
+        {
+            "name": "ZimaControls",
+            "id": "cb80934f-e10a-49cb-b898-e889da9f916e",
+            "actions": [
+                {
+                    "name": "RightJoystick",
+                    "type": "Value",
+                    "id": "80fdab3d-cf37-47be-b0b6-99d8d524129a",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "LeftJoystick",
+                    "type": "Value",
+                    "id": "56b4fcf2-2d04-4b8c-bf59-56e872464abc",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "5ed25ab2-a974-4bb6-bf44-4d16511f150e",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightJoystick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "57ace5c7-2fc8-434f-b43a-0664cc6dc3bb",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftJoystick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

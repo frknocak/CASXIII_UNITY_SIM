@@ -1,0 +1,6 @@
+memory leak sorunu ve Ekran görüntüleri yüzünden crash sorunu çözüldü.
+
+TAC 1. görev UDP kontroller düzeltildi.
+TAC 2. görev eklendi.
+
+Zima dikey kafa hareketleri eklendi (z ve x tuşları)

@@ -1,0 +1,2 @@
+- undercam için ayrı ve görüntü bozulması içermeyen bir ppp eklendi.
+- ön ve alt kameralar için her sahnenin settings paneline çözünürlük seçeneği eklendi.

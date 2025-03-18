@@ -1,0 +1,3 @@
+- Kuş bakışı kamera ve ana kamera arası geçiş eklendi (y tuşu).
+- tf24 3. görev yol borusu düzeltildi.
+- tf24 1. görev torpido hedefleri spawn pozisyonları ve senaryoları değiştirildi.
