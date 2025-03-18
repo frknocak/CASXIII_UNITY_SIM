@@ -19955,8 +19955,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1573756793}
-  - component: {fileID: 1573756792}
-  - component: {fileID: 1573756791}
   - component: {fileID: 1573756794}
   - component: {fileID: 1573756795}
   m_Layer: 0
@@ -19966,46 +19964,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1573756791
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1573756790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88a0a8c52ec103b429ce6cad6d79e9ee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rov_LowerThrusters: {fileID: 0}
-  movementSpeed: 0
-  thruster1: {fileID: 320495512}
-  thruster2: {fileID: 1249658576}
-  thruster3: {fileID: 1235779527}
-  thruster4: {fileID: 335590062}
-  ROV: {fileID: 707543896}
-  translationAmount: {x: 0, y: 0, z: 0}
---- !u!114 &1573756792
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1573756790}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5331c75863561e4ab9da4c566136eaa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rov_LowerThrusters: {fileID: 0}
-  movementSpeed: 0
-  thruster1: {fileID: 320495512}
-  thruster2: {fileID: 1249658576}
-  thruster3: {fileID: 1235779527}
-  thruster4: {fileID: 335590062}
-  ROV: {fileID: 707543896}
-  translationAmount: {x: 0, y: 0, z: 0}
 --- !u!4 &1573756793
 Transform:
   m_ObjectHideFlags: 0
@@ -20053,9 +20011,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d6538cefab14914291c17dd657c5453, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingBuoy: {fileID: 1423305509}
-  targetBuoy: {fileID: 1665777856}
   rov: {fileID: 707543896}
+  targetBuoy: {fileID: 1665777856}
   sendInterval: 0.1
 --- !u!1 &1579711479
 GameObject:
