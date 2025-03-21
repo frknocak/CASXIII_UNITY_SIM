@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 1521917601797cd458822ce9983d0728
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 194392
+  packageName: Accesible Audio Toolkit
+  packageVersion: 1.0
+  assetPath: Assets/Accessible Audio Toolkit/Scripts/FP_Camera.cs
+  uploadId: 435374
