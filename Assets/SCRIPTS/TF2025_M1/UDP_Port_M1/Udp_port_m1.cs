@@ -93,8 +93,8 @@ public class Udp_port_m1 : MonoBehaviour
         {
             float target_depth = k / 100;
             float tolerance = 0.05f; // Tolerans deðeri
-            //float simDepth = Map(target_depth, 0f, 2f, -9f, -0.6f);
-            float simDepth = Map(target_depth, 0f, 20f, 0f, -26f);
+            float simDepth = Map(target_depth, 0f, 2f, -9f, -0.6f);
+            //float simDepth = Map(target_depth, 0f, 20f, 0f, -26f);
 
             if (Mathf.Abs(ROV.transform.position.y - simDepth) > tolerance)
             {
