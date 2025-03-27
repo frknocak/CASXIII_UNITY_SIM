@@ -10,12 +10,16 @@ public class Udp_take : MonoBehaviour
     private Thread receiveThread;
     private bool isReceiving = true;
     private short[] receivedShorts = new short[6];  // 6 elemanlý short array
-    public Udp_port_m1 m1;
+
+    public GameObject ROV;
+    public float movementSpeed;
+    private Vector3 translationAmount;
+    private float rotationAmount = 1f; // Her bir veride kaç derece dönecek
 
     void Start()
     {
         StartUDPListener(12345);  // UDP portunu baþlat
-
+        translationAmount = new Vector3(0.0f, 0.015f, 0.0f); // Hareket miktarý
     }
 
     void Update()
@@ -24,12 +28,7 @@ public class Udp_take : MonoBehaviour
         if (receivedShorts != null)
         {
             Debug.Log($"Alýnan Short Deðerler: {string.Join(", ", receivedShorts)}");
-            m1.x = receivedShorts[0];
-            m1.y = receivedShorts[1];
-            m1.z = receivedShorts[2];
-            m1.h = receivedShorts[3];
-            m1.r = receivedShorts[4];
-            m1.k = receivedShorts[5];
+            HandleMovement();
         }
     }
 
@@ -60,7 +59,6 @@ public class Udp_take : MonoBehaviour
                         tempArray[i] = BitConverter.ToInt16(receivedBytes, i * 2);
                     }
 
-                    // Unity thread'inde deðiþkeni güncelle
                     lock (receivedShorts)
                     {
                         receivedShorts = tempArray;
@@ -78,6 +76,71 @@ public class Udp_take : MonoBehaviour
         }
     }
 
+    private void HandleMovement()
+    {
+        float x = receivedShorts[0];
+        float y = receivedShorts[1];
+        float z = receivedShorts[2];
+        float h = receivedShorts[3];
+        float r = receivedShorts[4];
+        float k = receivedShorts[5];
+
+        ROV.transform.Translate(Vector3.forward * Time.deltaTime * y / 9.5f);
+        ROV.transform.Translate(Vector3.right * Time.deltaTime * x / 20);
+        rotationAmount = h / 50;
+        ROV.transform.Rotate(Vector3.up, rotationAmount);
+
+        if (r == 1)
+        {
+            float target_depth = k / 10;
+            float tolerance = 0.05f;
+            float simDepth = Map(target_depth, 0f, 20f, -24f, -0.6f);
+
+            if (Mathf.Abs(ROV.transform.position.y - simDepth) > tolerance)
+            {
+                if (ROV.transform.position.y > simDepth && z > 0f)
+                {
+                    translationAmount = new Vector3(0.0f, (-1 * z) / 2000, 0.0f);
+                    ROV.transform.Translate(translationAmount);
+                }
+                else if (ROV.transform.position.y > simDepth && z <= 0f)
+                {
+                    translationAmount = new Vector3(0.0f, z / 2000, 0.0f);
+                    ROV.transform.Translate(translationAmount);
+                }
+                else if (ROV.transform.position.y < simDepth && z < 0f)
+                {
+                    translationAmount = new Vector3(0.0f, (-1 * z) / 2000, 0.0f);
+                    ROV.transform.Translate(translationAmount);
+                }
+                else if (ROV.transform.position.y < simDepth && z >= 0f)
+                {
+                    translationAmount = new Vector3(0.0f, z / 2000, 0.0f);
+                    ROV.transform.Translate(translationAmount);
+                }
+            }
+            else
+            {
+                ROV.transform.position = new Vector3(
+                    ROV.transform.position.x,
+                    simDepth,
+                    ROV.transform.position.z
+                );
+            }
+        }
+        else
+        {
+            translationAmount = new Vector3(0.0f, z / 2000, 0.0f);
+            ROV.transform.Translate(translationAmount);
+        }
+    }
+
+    private float Map(float value, float inputMin, float inputMax, float outputMin, float outputMax)
+    {
+        return (inputMax - value) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin;
+    }
+
+
     void OnApplicationQuit()
     {
         isReceiving = false;
@@ -85,3 +148,4 @@ public class Udp_take : MonoBehaviour
         udpClient?.Close();
     }
 }
+
