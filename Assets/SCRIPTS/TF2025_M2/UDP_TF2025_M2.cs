@@ -1,85 +1,103 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Net;
+using System.Threading;
+using System;
 using UnityEngine;
 
-public class UDP_TF2025_M2 : MonoBehaviour
+public class Udp_take : MonoBehaviour
 {
-    public ROV_lowerThrusters rov_LowerThrusters;
-    public float movementSpeed;
-    public GameObject thruster1;
-    public GameObject thruster2;
-    public GameObject thruster3;
-    public GameObject thruster4;
-    public GameObject ROV;
+    private UdpClient udpClient;
+    private Thread receiveThread;
+    private bool isReceiving = true;
+    private short[] receivedShorts = new short[6];  // 6 elemanlý short array
 
-    public Vector3 translationAmount;
-    private float rotationAmount = 1f; //Her bir veride kaç derece dönecek
-    private UdpClient udpListener;
-    private IPEndPoint udpEndPoint;
+    public GameObject ROV;
+    public float movementSpeed;
+    private Vector3 translationAmount;
+    private float rotationAmount = 1f; // Her bir veride kaç derece dönecek
+
     void Start()
     {
-        translationAmount = new Vector3(0.0f, 0.015f, 0.0f); //Her bir veride ne kadar yukarý çýkacak
-        int udpPort = 12345;
-        udpListener = new UdpClient(udpPort);
-        udpEndPoint = new IPEndPoint(IPAddress.Any, 0);
-        PlayerPrefs.SetInt("udpPort", udpPort);
-
-        Debug.Log("UDP server is listening...");
+        StartUDPListener(12345);  // UDP portunu baþlat
+        translationAmount = new Vector3(0.0f, 0.015f, 0.0f); // Hareket miktarý
     }
 
-    float Map(float value, float inputMin, float inputMax, float outputMin, float outputMax)
+    void Update()
     {
-        return (value - inputMin) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin;
-    }
-    private void FixedUpdate()
-    {
-        movementSpeed = rov_LowerThrusters.movementSpeed;
-        if (udpListener.Available > 0)
+        // Alýnan verileri ekrana yazdýr
+        if (receivedShorts != null)
         {
-            byte[] data = udpListener.Receive(ref udpEndPoint);
-            HandleMessage(data);
+            Debug.Log($"Alýnan Short Deðerler: {string.Join(", ", receivedShorts)}");
+            HandleMovement();
         }
     }
-    private void HandleMessage(byte[] ints)
+
+    private void StartUDPListener(int port)
     {
-        float x = (float)(sbyte)ints[0];
-        float y = (float)(sbyte)ints[1];
-        float z = (float)(sbyte)ints[2];
-        float h = (float)(sbyte)ints[3];
-        float r = (float)(sbyte)ints[4];
-        float k = (float)(sbyte)ints[5];
-        //float l = (float)Convert.ToInt32(ints[4]);
-        //float m = (float)Convert.ToInt32(ints[5]);
-        //float n = (float)Convert.ToInt32(ints[6]);
-        //x = x - 127;
-        //y = y - 127;
-        //z = z - 127;
-        //h = h - 127;
-        //p = p - 127;
-        //r = r - 127;
-        //k = k - 127;
-        Debug.Log(string.Format("int: {0} {1} {2} {3} \n", x, y, z, h));
-        Debug.Log(string.Format("byte: {0} {1} {2} {3} \n", ints[0], ints[1], ints[2], ints[3]));
-        //Debug.Log(string.Format("int: {0} {1} {2} {3} {4} {5} {6} \n", x, y, z, h,p,r,k));
-        //Debug.Log(string.Format("byte: {0} {1} {2} {3} {4} {5} {6} \n", ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6]));
+        udpClient = new UdpClient(port);
+        receiveThread = new Thread(ReceiveData);
+        receiveThread.IsBackground = true;  // Thread'in arka planda çalýþmasýný saðlar
+        receiveThread.Start();
+    }
+
+    private void ReceiveData()
+    {
+        IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 12345);
+
+        while (isReceiving)
+        {
+            try
+            {
+                byte[] receivedBytes = udpClient.Receive(ref remoteEndPoint);
+                Debug.Log($"UDP Veri Alýndý, {receivedBytes.Length} byte");
+
+                if (receivedBytes.Length == 12) // 6 * 2 byte (short)
+                {
+                    short[] tempArray = new short[6];
+                    for (int i = 0; i < 6; i++)
+                    {
+                        tempArray[i] = BitConverter.ToInt16(receivedBytes, i * 2);
+                    }
+
+                    lock (receivedShorts)
+                    {
+                        receivedShorts = tempArray;
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning("Hatalý veri boyutu!");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("UDP Alým Hatasý: " + e.Message);
+            }
+        }
+    }
+
+    private void HandleMovement()
+    {
+        float x = receivedShorts[0];
+        float y = receivedShorts[1];
+        float z = receivedShorts[2];
+        float h = receivedShorts[3];
+        float r = receivedShorts[4];
+        float k = receivedShorts[5];
+
         ROV.transform.Translate(Vector3.forward * Time.deltaTime * y / 9.5f);
         ROV.transform.Translate(Vector3.right * Time.deltaTime * x / 20);
-        //translationAmount = new Vector3(0.0f, z / 3900, 0.0f);
-        //ROV.transform.Translate(translationAmount);
         rotationAmount = h / 50;
         ROV.transform.Rotate(Vector3.up, rotationAmount);
 
         if (r == 1)
         {
-            float target_depth = k / 100;
-            float tolerance = 0.05f; // Tolerans deðeri
-            float simDepth = Map(target_depth, 0f, 2f, -9f, -0.6f);
+            float target_depth = k / 10;
+            float tolerance = 0.05f;
+            float simDepth = Map(target_depth, 0f, 20f, -37f, -0.6f);
 
             if (Mathf.Abs(ROV.transform.position.y - simDepth) > tolerance)
             {
-                // Derinlik farký toleransýn üzerindeyse hareket et
                 if (ROV.transform.position.y > simDepth && z > 0f)
                 {
                     translationAmount = new Vector3(0.0f, (-1 * z) / 2000, 0.0f);
@@ -103,11 +121,10 @@ public class UDP_TF2025_M2 : MonoBehaviour
             }
             else
             {
-                // Derinlik farký tolerans içindeyse sadece Y eksenini sabitle
                 ROV.transform.position = new Vector3(
-                    ROV.transform.position.x,  // X ekseninde hareket serbest
-                    simDepth,                  // Y ekseni sabitleniyor
-                    ROV.transform.position.z   // Z ekseninde hareket serbest
+                    ROV.transform.position.x,
+                    simDepth,
+                    ROV.transform.position.z
                 );
             }
         }
@@ -116,11 +133,19 @@ public class UDP_TF2025_M2 : MonoBehaviour
             translationAmount = new Vector3(0.0f, z / 2000, 0.0f);
             ROV.transform.Translate(translationAmount);
         }
-
     }
 
-    private void OnDestroy()
+    private float Map(float value, float inputMin, float inputMax, float outputMin, float outputMax)
     {
-        udpListener.Close();
+        return (inputMax - value) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin;
+    }
+
+
+    void OnApplicationQuit()
+    {
+        isReceiving = false;
+        receiveThread?.Abort();
+        udpClient?.Close();
     }
 }
+
