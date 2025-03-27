@@ -4,7 +4,7 @@ using System.Threading;
 using System;
 using UnityEngine;
 
-public class Udp_take : MonoBehaviour
+public class UDP_TF2025_M2 : MonoBehaviour
 {
     private UdpClient udpClient;
     private Thread receiveThread;
