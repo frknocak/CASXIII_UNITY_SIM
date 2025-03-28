@@ -10231,7 +10231,6 @@ GameObject:
   - component: {fileID: 707543899}
   - component: {fileID: 707543906}
   - component: {fileID: 707543905}
-  - component: {fileID: 707543907}
   m_Layer: 0
   m_Name: underWaterObj
   m_TagString: underWaterObj
@@ -10483,19 +10482,6 @@ MonoBehaviour:
   surfaceLevel: -1.2
   exitChecker: {fileID: 707543905}
   messageText: {fileID: 645104267}
---- !u!114 &707543907
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 707543896}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5dc68ea425bc3c447bf2da53407e74fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ROV: {fileID: 707543896}
 --- !u!1 &709295915
 GameObject:
   m_ObjectHideFlags: 0
@@ -20029,7 +20015,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1573756793}
-  - component: {fileID: 1573756794}
   - component: {fileID: 1573756795}
   - component: {fileID: 1573756796}
   m_Layer: 0
@@ -20054,32 +20039,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1573756794
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1573756790}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 063fcaa748a23124691e11800fc6bbfc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rov_LowerThrusters: {fileID: 320495520}
-  movementSpeed: 0
-  thruster1: {fileID: 320495512}
-  thruster2: {fileID: 1249658576}
-  thruster3: {fileID: 1235779527}
-  thruster4: {fileID: 335590062}
-  ROV: {fileID: 707543896}
-  x: 0
-  y: 0
-  z: 0
-  h: 0
-  r: 0
-  k: 0
-  translationAmount: {x: 0, y: 0, z: 0}
 --- !u!114 &1573756795
 MonoBehaviour:
   m_ObjectHideFlags: 0
