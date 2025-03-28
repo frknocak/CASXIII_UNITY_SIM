@@ -83,6 +83,9 @@ public class Udp_LocSender : MonoBehaviour
     private float x_val;
     private float y_val;
     private float z_val; // Yeni eklenen deðer
+    private float current_depth;
+    private float calculated_depth;
+
 
     private bool isPositionSet = false; // Pozisyonun sadece bir kez atanmasýný kontrol eder
 
@@ -121,12 +124,15 @@ public class Udp_LocSender : MonoBehaviour
     {
         z_val = RotateHeadAboutDegree(); // Z ekseni için hesaplama fonksiyonunu çaðýr
 
-        string message = string.Format(CultureInfo.InvariantCulture, "{0},{1},{2}",
-            x_val, y_val, z_val);
+        current_depth = rov.transform.position.y;
+        calculated_depth = Map(current_depth, 0f, 20f, -28f, -0.6f);
+
+        string message = string.Format(CultureInfo.InvariantCulture, "{0},{1},{2},{3}",
+            x_val, y_val, z_val,calculated_depth);
         byte[] data = Encoding.UTF8.GetBytes(message);
 
         udpClient.Send(data, data.Length, targetEndPoint);
-        Debug.Log($"Gönderilen Pozisyon: x = {x_val}, y = {y_val}, z = {z_val}");
+        Debug.Log($"Gönderilen Pozisyon: x = {x_val}, y = {y_val}, z = {z_val} , h= {calculated_depth}");
     }
 
     private float RotateHeadAboutDegree()
@@ -140,6 +146,11 @@ public class Udp_LocSender : MonoBehaviour
             triAngle = tolerans;
         }
         return triAngle;
+    }
+
+    private float Map(float value, float inputMin, float inputMax, float outputMin, float outputMax)
+    {
+        return (20-(value - outputMin) * (inputMax / 27.4f));
     }
 
     private void OnApplicationQuit()
