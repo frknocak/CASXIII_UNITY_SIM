@@ -8,8 +8,8 @@ public class UDP_TF2025_M2 : MonoBehaviour
 {
     private UdpClient udpClient;
     private Thread receiveThread;
-    private bool isReceiving = true;
-    private short[] receivedShorts = new short[6];  // 6 elemanlý short array
+    private bool isReceiving = false;
+    private short[] receivedShorts = new short[6]; // 6 elemanlý short array
 
     public GameObject ROV;
     public float movementSpeed;
@@ -18,7 +18,7 @@ public class UDP_TF2025_M2 : MonoBehaviour
 
     void Start()
     {
-        StartUDPListener(12345);  // UDP portunu baþlat
+        StartUDPListener(12345); // UDP portunu baþlat
         translationAmount = new Vector3(0.0f, 0.015f, 0.0f); // Hareket miktarý
     }
 
@@ -34,9 +34,16 @@ public class UDP_TF2025_M2 : MonoBehaviour
 
     private void StartUDPListener(int port)
     {
+        if (udpClient != null)
+        {
+            CloseUDPListener(); // Eðer eski baðlantý açýksa kapat
+        }
+
         udpClient = new UdpClient(port);
+        isReceiving = true;
+
         receiveThread = new Thread(ReceiveData);
-        receiveThread.IsBackground = true;  // Thread'in arka planda çalýþmasýný saðlar
+        receiveThread.IsBackground = true;
         receiveThread.Start();
     }
 
@@ -69,9 +76,10 @@ public class UDP_TF2025_M2 : MonoBehaviour
                     Debug.LogWarning("Hatalý veri boyutu!");
                 }
             }
-            catch (Exception e)
+            catch (SocketException e)
             {
                 Debug.LogError("UDP Alým Hatasý: " + e.Message);
+                isReceiving = false;
             }
         }
     }
@@ -103,17 +111,12 @@ public class UDP_TF2025_M2 : MonoBehaviour
                     translationAmount = new Vector3(0.0f, (-1 * z) / 2000, 0.0f);
                     ROV.transform.Translate(translationAmount);
                 }
-                else if (ROV.transform.position.y > simDepth && z <= 0f)
-                {
-                    translationAmount = new Vector3(0.0f, z / 2000, 0.0f);
-                    ROV.transform.Translate(translationAmount);
-                }
                 else if (ROV.transform.position.y < simDepth && z < 0f)
                 {
                     translationAmount = new Vector3(0.0f, (-1 * z) / 2000, 0.0f);
                     ROV.transform.Translate(translationAmount);
                 }
-                else if (ROV.transform.position.y < simDepth && z >= 0f)
+                else
                 {
                     translationAmount = new Vector3(0.0f, z / 2000, 0.0f);
                     ROV.transform.Translate(translationAmount);
@@ -135,17 +138,30 @@ public class UDP_TF2025_M2 : MonoBehaviour
         }
     }
 
+    private void CloseUDPListener()
+    {
+        isReceiving = false;
+
+        if (udpClient != null)
+        {
+            udpClient.Close();
+            udpClient = null;
+        }
+
+        if (receiveThread != null && receiveThread.IsAlive)
+        {
+            receiveThread.Abort();
+            receiveThread = null;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        CloseUDPListener();
+    }
     private float Map(float value, float inputMin, float inputMax, float outputMin, float outputMax)
     {
         return (inputMax - value) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin;
-    }
-
-
-    void OnApplicationQuit()
-    {
-        isReceiving = false;
-        receiveThread?.Abort();
-        udpClient?.Close();
     }
 }
 
