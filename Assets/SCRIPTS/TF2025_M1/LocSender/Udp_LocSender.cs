@@ -82,20 +82,20 @@ public class Udp_LocSender : MonoBehaviour
     public GameObject targetBuoy;
     private UdpClient udpClient;
     private IPEndPoint targetEndPoint;
+    private rotateCompass compassRotation;
     public float sendInterval = 0.1f; // Veri gönderme aralýðý
-
+    
     private float x_val;
     private float y_val;
     private bool isPositionSet = false; // Pozisyonun sadece bir kez atanmasýný kontrol eder
-
     private void Start()
     {
         udpClient = new UdpClient();
         targetEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 54321); // Python'a göndereceðimiz IP ve port
         SetInitialPosition(); // x_val ve y_val'ý bir kez hesaplayýp kaydet
         StartCoroutine(SendTargetPositionCoroutine());
+        compassRotation = GetComponent<rotateCompass>();
     }
-
     private void SetInitialPosition()
     {
         if (!isPositionSet)
@@ -118,10 +118,9 @@ public class Udp_LocSender : MonoBehaviour
             yield return new WaitForSeconds(sendInterval); // Belirtilen aralýkta bekle
         }
     }
-
     private void SendTargetPosition()
     {
-        float rov_rotation_y = rov.transform.eulerAngles.y; // Doðru y ekseni dönüþ açýsýný almak için eulerAngles kullan
+        float rov_rotation_y = compassRotation.RotateHeadAboutDegree(); // Doðru y ekseni dönüþ açýsýný almak için eulerAngles kullan
 
         string message = string.Format(CultureInfo.InvariantCulture, "{0},{1},{2}",
             x_val, y_val, rov_rotation_y);
