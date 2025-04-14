@@ -21,6 +21,8 @@ public class Udp_port_m1 : MonoBehaviour
     [SerializeField] public short h;
     [SerializeField] public short r;
     [SerializeField] public short k;
+    [SerializeField] public short rc; //rotate sender control
+    [SerializeField] public short tr; //target rotation
 
     public Vector3 translationAmount;
     private float rotationAmount = 1f; //Her bir veride kaç derece dönecek
@@ -64,7 +66,7 @@ public class Udp_port_m1 : MonoBehaviour
         // Son iki byte'ý 16-bit (short) integer olarak oku
         //float k = (float)(short)ints[5];
 
-        Debug.Log(string.Format("byte: {0} {1} {2} {3} {4} {5}\n", ints[0], ints[1], ints[2], ints[3], ints[4], ints[5]));
+        Debug.Log(string.Format("byte: {0} {1} {2} {3} {4} {5} {6} {7} \n", ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7]));
 
         ROV.transform.Translate(Vector3.forward * Time.deltaTime * y / 9.5f);
         ROV.transform.Translate(Vector3.right * Time.deltaTime * x / 20);

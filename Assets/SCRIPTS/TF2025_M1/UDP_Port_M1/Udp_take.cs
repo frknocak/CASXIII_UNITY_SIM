@@ -161,7 +161,7 @@ public class Udp_take : MonoBehaviour
     private UdpClient udpClient;
     private Thread receiveThread;
     private bool isReceiving = false;
-    private short[] receivedShorts = new short[6]; // 6 elemanlý short array
+    private short[] receivedShorts = new short[8]; // 8 elemanlý short array
 
     public GameObject ROV;
     public float movementSpeed;
@@ -210,10 +210,10 @@ public class Udp_take : MonoBehaviour
                 byte[] receivedBytes = udpClient.Receive(ref remoteEndPoint);
                 Debug.Log($"UDP Veri Alýndý, {receivedBytes.Length} byte");
 
-                if (receivedBytes.Length == 12) // 6 * 2 byte (short)
+                if (receivedBytes.Length == 16) // 8 * 2 byte (short)
                 {
-                    short[] tempArray = new short[6];
-                    for (int i = 0; i < 6; i++)
+                    short[] tempArray = new short[7];
+                    for (int i = 0; i < 8; i++)
                     {
                         tempArray[i] = BitConverter.ToInt16(receivedBytes, i * 2);
                     }
@@ -244,6 +244,8 @@ public class Udp_take : MonoBehaviour
         float h = receivedShorts[3];
         float r = receivedShorts[4];
         float k = receivedShorts[5];
+        float rc = receivedShorts[6]; // for rotation controller
+        float tr = receivedShorts[7]; // for target rotation
 
         ROV.transform.Translate(Vector3.forward * Time.deltaTime * y / 9.5f);
         ROV.transform.Translate(Vector3.right * Time.deltaTime * x / 20);
