@@ -290,6 +290,14 @@ public class Udp_take : MonoBehaviour
             translationAmount = new Vector3(0.0f, z / 2000, 0.0f);
             ROV.transform.Translate(translationAmount);
         }
+
+        //if (rc == 1)
+        //{
+        //    float target_rotation = rc;
+        //    float tolerance = 0.05f;
+
+
+        //}
     }
 
     private void CloseUDPListener()

@@ -57,14 +57,6 @@ public class Udp_port_m1 : MonoBehaviour
 
     private void HandleMessage(byte[] ints)
     {
-        //float x = (float)(sbyte)ints[0];
-        //float y = (float)(sbyte)ints[1];
-        //float z = (float)(sbyte)ints[2];
-        //float h = (float)(sbyte)ints[3];
-        //float r = (float)(sbyte)ints[4];
-
-        // Son iki byte'ı 16-bit (short) integer olarak oku
-        //float k = (float)(short)ints[5];
 
         Debug.Log(string.Format("byte: {0} {1} {2} {3} {4} {5} {6} {7} \n", ints[0], ints[1], ints[2], ints[3], ints[4], ints[5], ints[6], ints[7]));
 
