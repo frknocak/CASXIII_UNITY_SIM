@@ -8,15 +8,27 @@ public class RotationForM1 : MonoBehaviour
     public float target_rotation = 0f;
     public GameObject ROV;
 
-
     private void FixedUpdate()
     {
-    Quaternion mevcutRotasyon = ROV.transform.rotation;
+        float currentY = ROV.transform.eulerAngles.y;
 
-    Quaternion targetRotateEuler = Quaternion.Euler(0, target_rotation, 0);
+        float shortestAngle = Mathf.DeltaAngle(currentY, target_rotation);
 
-    ROV.transform.rotation = Quaternion.Lerp(mevcutRotasyon, targetRotateEuler, Time.deltaTime * rotationSpeed);
+        float newY;
 
+        if (Mathf.Abs(shortestAngle) < (rotationSpeed*Time.deltaTime))
+        {
+            newY = target_rotation; // hedefe ulaþtý
+        }
+        else
+        {
+            newY = currentY + Mathf.Sign(shortestAngle) * (rotationSpeed * Time.deltaTime); // saða mý sola mý?
+        }
+
+        ROV.transform.rotation = Quaternion.Euler(0, newY, 0);
     }
 }
+
+
+
 
