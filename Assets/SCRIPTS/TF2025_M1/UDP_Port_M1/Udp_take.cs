@@ -155,6 +155,7 @@ using System.Net;
 using System.Threading;
 using System;
 using UnityEngine;
+using Unity.VisualScripting;
 
 public class Udp_take : MonoBehaviour
 {
@@ -168,21 +169,36 @@ public class Udp_take : MonoBehaviour
     private Vector3 translationAmount;
     private float rotationAmount = 1f; // Her bir veride kaç derece dönecek
 
+    public float rotationSpeed = 45.0f;
+    public float rotation_angle = 0f; // We will get this variable from Python side
+
+    private float target_rotation = 0f;
+    private bool rotating = false;
     void Start()
     {
         StartUDPListener(12345); // UDP portunu baþlat
         translationAmount = new Vector3(0.0f, 0.015f, 0.0f); // Hareket miktarý
     }
 
-    void Update()
+    void FixedUpdate()
     {
         // Alýnan verileri ekrana yazdýr
         if (receivedShorts != null)
         {
             Debug.Log($"Alýnan Short Deðerler: {string.Join(", ", receivedShorts)}");
             HandleMovement();
+            
+        }
+        if (receivedShorts[6] == 1)
+        {
+            RotationforPython();
+        }
+        else
+        {
+            Debug.Log("Rotation Controller deðeri 1 deðil");
         }
     }
+
 
     private void StartUDPListener(int port)
     {
@@ -252,6 +268,8 @@ public class Udp_take : MonoBehaviour
         rotationAmount = h / 50;
         ROV.transform.Rotate(Vector3.up, rotationAmount);
 
+        rotation_angle = tr;
+
         if (r == 1)
         {
             float target_depth = k / 10;
@@ -281,8 +299,7 @@ public class Udp_take : MonoBehaviour
                 ROV.transform.position = new Vector3(
                     ROV.transform.position.x,
                     simDepth,
-                    ROV.transform.position.z
-                );
+                    ROV.transform.position.z);
             }
         }
         else
@@ -290,14 +307,38 @@ public class Udp_take : MonoBehaviour
             translationAmount = new Vector3(0.0f, z / 2000, 0.0f);
             ROV.transform.Translate(translationAmount);
         }
+    }
 
-        //if (rc == 1)
-        //{
-        //    float target_rotation = rc;
-        //    float tolerance = 0.05f;
+    private void RotationforPython()
+    {
+        float currentY = ROV.transform.eulerAngles.y;
 
+        if (!rotating && rotation_angle != 0f)
+        {
+            target_rotation = (currentY + rotation_angle) % 360;
+            rotating = true;
+        }
 
-        //}
+        if (rotating == true)
+        {
+            float shortestAngle = Mathf.DeltaAngle(currentY, target_rotation);
+            float rotation_step = rotationSpeed * Time.deltaTime;
+
+            float newY;
+
+            if (Mathf.Abs(shortestAngle) < rotation_step)
+            {
+                newY = target_rotation;
+                rotating = false;
+                rotation_angle = 0f;
+            }
+            else
+            {
+                newY = currentY + Mathf.Sign(shortestAngle) * rotation_step;
+            }
+
+            ROV.transform.rotation = Quaternion.Euler(0, newY, 0);
+        }
     }
 
     private void CloseUDPListener()
