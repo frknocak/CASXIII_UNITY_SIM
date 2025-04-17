@@ -10496,7 +10496,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 45
-  rotation_angle: -30
+  rotation_angle: 20
   ROV: {fileID: 707543896}
 --- !u!1 &709295915
 GameObject:
