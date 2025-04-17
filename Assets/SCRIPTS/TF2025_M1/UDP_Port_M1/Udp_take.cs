@@ -301,7 +301,6 @@ public class Udp_take : MonoBehaviour
 
         if (rc == 1)
         {
-
             float currentY = ROV.transform.eulerAngles.y;
             if (!rotating && tr != 0f)
             {
