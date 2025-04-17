@@ -173,6 +173,9 @@ public class Udp_take : MonoBehaviour
     public float rotation_angle = 0f; // We will get this variable from Python side             
     private float target_rotation = 0f;
     private bool rotating = false;
+
+    private float prevRc = 0f;
+
     void Start()
     {
         StartUDPListener(12345); // UDP portunu baþlat
@@ -302,12 +305,14 @@ public class Udp_take : MonoBehaviour
         if (rc == 1)
         {
             float currentY = ROV.transform.eulerAngles.y;
-            if (!rotating && tr != 0f)
+            if (!rotating && tr != 0f && prevRc != 1)
             {
                 target_rotation = (currentY + tr) % 360;
                 rotation_angle = tr;
                 rotating = true;
+
             }
+
             if (rotating == true)
             {
                 float shortestAngle = Mathf.DeltaAngle(currentY, target_rotation);
@@ -321,18 +326,17 @@ public class Udp_take : MonoBehaviour
                     rotating = false;
                     rotation_angle = 0f;
                     ROV.transform.rotation = Quaternion.Euler(0, newY, 0);
+
                 }
                 else
                 {
                     newY = currentY + Mathf.Sign(shortestAngle) * rotation_step;
                     ROV.transform.rotation = Quaternion.Euler(0, newY, 0);
+
                 }
             }
         }
-        else
-        {
-            Debug.Log($" Rotation Controller deðeri: {rc} ");
-        }
+        prevRc = rc;
     }
 
     private void CloseUDPListener()
