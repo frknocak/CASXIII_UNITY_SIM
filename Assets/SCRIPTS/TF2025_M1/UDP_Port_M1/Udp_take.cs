@@ -174,7 +174,8 @@ public class Udp_take : MonoBehaviour
     private float target_rotation = 0f;
     private bool rotating = false;
 
-    //private float prevRc = 0f;
+    private float prevRc = 0f;
+
 
     void Start()
     {
@@ -189,7 +190,7 @@ public class Udp_take : MonoBehaviour
         {
             Debug.Log($"Alýnan Short Deðerler: {string.Join(", ", receivedShorts)}");
             HandleMovement();
-            
+
         }
 
     }
@@ -302,11 +303,12 @@ public class Udp_take : MonoBehaviour
             ROV.transform.Translate(translationAmount);
         }
 
-        if (rc == 1)
+
+        if (rc == 1 && prevRc != 1)
         {
 
             float currentY = ROV.transform.eulerAngles.y;
-            if (!rotating && tr != 0f )
+            if (!rotating && tr != 0f)
             {
                 target_rotation = (currentY + tr) % 360;
                 rotation_angle = tr;
@@ -328,6 +330,9 @@ public class Udp_take : MonoBehaviour
                     rotation_angle = 0f;
                     ROV.transform.rotation = Quaternion.Euler(0, newY, 0);
 
+                    receivedShorts[6] = 0;
+                    receivedShorts[7] = 0;
+
                 }
                 else
                 {
@@ -336,8 +341,8 @@ public class Udp_take : MonoBehaviour
 
                 }
             }
+            prevRc = rc;
         }
-        //prevRc = rc;
     }
 
     private void CloseUDPListener()
@@ -361,10 +366,7 @@ public class Udp_take : MonoBehaviour
     {
         CloseUDPListener();
     }
-    float NormalizeAngle(float angle)
-    {
-        return ((360 - angle + 90) % 360);
-    }
+
     private float Map(float value, float inputMin, float inputMax, float outputMin, float outputMax)
     {
         return (inputMax - value) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin;
