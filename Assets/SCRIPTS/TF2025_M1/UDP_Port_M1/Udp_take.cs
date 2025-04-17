@@ -174,7 +174,7 @@ public class Udp_take : MonoBehaviour
     private float target_rotation = 0f;
     private bool rotating = false;
 
-    private float prevRc = 0f;
+    //private float prevRc = 0f;
 
     void Start()
     {
@@ -284,7 +284,7 @@ public class Udp_take : MonoBehaviour
                 }
                 else
                 {
-                    translationAmount = new Vector3(0.0f, z / 2000, 0.0f);
+                    translationAmount = new Vector3(0.0f, (z / 2000), 0.0f);
                     ROV.transform.Translate(translationAmount);
                 }
             }
@@ -304,8 +304,9 @@ public class Udp_take : MonoBehaviour
 
         if (rc == 1)
         {
+
             float currentY = ROV.transform.eulerAngles.y;
-            if (!rotating && tr != 0f && prevRc != 1)
+            if (!rotating && tr != 0f )
             {
                 target_rotation = (currentY + tr) % 360;
                 rotation_angle = tr;
@@ -336,7 +337,7 @@ public class Udp_take : MonoBehaviour
                 }
             }
         }
-        prevRc = rc;
+        //prevRc = rc;
     }
 
     private void CloseUDPListener()
@@ -360,10 +361,15 @@ public class Udp_take : MonoBehaviour
     {
         CloseUDPListener();
     }
+    float NormalizeAngle(float angle)
+    {
+        return ((360 - angle + 90) % 360);
+    }
     private float Map(float value, float inputMin, float inputMax, float outputMin, float outputMax)
     {
         return (inputMax - value) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin;
     }
+
     
 }
 
