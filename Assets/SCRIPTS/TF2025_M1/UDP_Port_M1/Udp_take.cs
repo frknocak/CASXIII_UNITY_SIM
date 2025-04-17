@@ -169,9 +169,8 @@ public class Udp_take : MonoBehaviour
     private Vector3 translationAmount;
     private float rotationAmount = 1f; // Her bir veride kaç derece dönecek
 
-    public float rotationSpeed = 45.0f;
-    public float rotation_angle = 0f; // We will get this variable from Python side
-
+    public float rotationSpeed = 45.0f;                                             /*This part for the rotation controller function*/
+    public float rotation_angle = 0f; // We will get this variable from Python side             
     private float target_rotation = 0f;
     private bool rotating = false;
     void Start()
@@ -189,14 +188,7 @@ public class Udp_take : MonoBehaviour
             HandleMovement();
             
         }
-        if (receivedShorts[6] == 1)
-        {
-            RotationforPython();
-        }
-        else
-        {
-            Debug.Log("Rotation Controller deðeri 1 deðil");
-        }
+
     }
 
 
@@ -228,8 +220,8 @@ public class Udp_take : MonoBehaviour
 
                 if (receivedBytes.Length == 16) // 8 * 2 byte (short)
                 {
-                    short[] tempArray = new short[7];
-                    for (int i = 0; i < 8; i++)
+                    short[] tempArray = new short[8];
+                    for (int i = 0; i < tempArray.Length; i++)
                     {
                         tempArray[i] = BitConverter.ToInt16(receivedBytes, i * 2);
                     }
@@ -268,7 +260,6 @@ public class Udp_take : MonoBehaviour
         rotationAmount = h / 50;
         ROV.transform.Rotate(Vector3.up, rotationAmount);
 
-        rotation_angle = tr;
 
         if (r == 1)
         {
@@ -307,37 +298,41 @@ public class Udp_take : MonoBehaviour
             translationAmount = new Vector3(0.0f, z / 2000, 0.0f);
             ROV.transform.Translate(translationAmount);
         }
-    }
 
-    private void RotationforPython()
-    {
-        float currentY = ROV.transform.eulerAngles.y;
-
-        if (!rotating && rotation_angle != 0f)
+        if (rc == 1)
         {
-            target_rotation = (currentY + rotation_angle) % 360;
-            rotating = true;
+
+            float currentY = ROV.transform.eulerAngles.y;
+            if (!rotating && tr != 0f)
+            {
+                target_rotation = (currentY + tr) % 360;
+                rotation_angle = tr;
+                rotating = true;
+            }
+            if (rotating == true)
+            {
+                float shortestAngle = Mathf.DeltaAngle(currentY, target_rotation);
+                float rotation_step = rotationSpeed * Time.deltaTime;
+
+                float newY;
+
+                if (Mathf.Abs(shortestAngle) < rotation_step)
+                {
+                    newY = target_rotation;
+                    rotating = false;
+                    rotation_angle = 0f;
+                    ROV.transform.rotation = Quaternion.Euler(0, newY, 0);
+                }
+                else
+                {
+                    newY = currentY + Mathf.Sign(shortestAngle) * rotation_step;
+                    ROV.transform.rotation = Quaternion.Euler(0, newY, 0);
+                }
+            }
         }
-
-        if (rotating == true)
+        else
         {
-            float shortestAngle = Mathf.DeltaAngle(currentY, target_rotation);
-            float rotation_step = rotationSpeed * Time.deltaTime;
-
-            float newY;
-
-            if (Mathf.Abs(shortestAngle) < rotation_step)
-            {
-                newY = target_rotation;
-                rotating = false;
-                rotation_angle = 0f;
-            }
-            else
-            {
-                newY = currentY + Mathf.Sign(shortestAngle) * rotation_step;
-            }
-
-            ROV.transform.rotation = Quaternion.Euler(0, newY, 0);
+            Debug.Log($" Rotation Controller deðeri: {rc} ");
         }
     }
 
@@ -368,3 +363,4 @@ public class Udp_take : MonoBehaviour
     }
     
 }
+
