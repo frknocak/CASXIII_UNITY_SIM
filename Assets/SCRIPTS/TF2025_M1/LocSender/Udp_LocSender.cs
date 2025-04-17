@@ -82,7 +82,7 @@ public class Udp_LocSender : MonoBehaviour
 
     private float x_val;
     private float y_val;
-    private float z_val; // Yeni eklenen deðer
+    private float head_val; // Yeni eklenen deðer
     private float current_depth;
     private float calculated_depth;
 
@@ -122,30 +122,24 @@ public class Udp_LocSender : MonoBehaviour
 
     private void SendTargetPosition()
     {
-        z_val = RotateHeadAboutDegree(); // Z ekseni için hesaplama fonksiyonunu çaðýr
+        head_val = HeadValueForPyhtonCoordinates(); // Head deðeri için hesaplama fonksiyonunu çaðýr
 
         current_depth = rov.transform.position.y;
         calculated_depth = Map(current_depth, 0f, 20f, -28f, -0.6f);
 
         string message = string.Format(CultureInfo.InvariantCulture, "{0},{1},{2},{3}",
-            x_val, y_val, z_val,calculated_depth);
+            x_val, y_val, head_val, calculated_depth);
         byte[] data = Encoding.UTF8.GetBytes(message);
 
         udpClient.Send(data, data.Length, targetEndPoint);
-        //Debug.Log($"Gönderilen Pozisyon: x = {x_val}, y = {y_val}, z = {z_val} , h= {calculated_depth}");
+        Debug.Log($"Gönderilen Pozisyon: x = {x_val}, y = {y_val}, head = {head_val} , h= {calculated_depth}");
     }
 
-    private float RotateHeadAboutDegree()
+    private float HeadValueForPyhtonCoordinates()
     {
         float simAngle = rov.transform.rotation.eulerAngles.y;
-        float triAngle = 90 - simAngle + 360;
-
-        if (triAngle > 360)
-        {
-            float tolerans = triAngle - 360;
-            triAngle = tolerans;
-        }
-        return triAngle;
+        float pyAngle = (360 - simAngle + 90) % 360;
+        return pyAngle;
     }
 
     private float Map(float value, float inputMin, float inputMax, float outputMin, float outputMax)

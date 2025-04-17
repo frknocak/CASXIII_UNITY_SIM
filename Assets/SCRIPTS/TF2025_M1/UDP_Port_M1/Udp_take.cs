@@ -176,6 +176,7 @@ public class Udp_take : MonoBehaviour
 
     private float prevRc = 0f;
 
+
     void Start()
     {
         StartUDPListener(12345); // UDP portunu baþlat
@@ -189,7 +190,7 @@ public class Udp_take : MonoBehaviour
         {
             Debug.Log($"Alýnan Short Deðerler: {string.Join(", ", receivedShorts)}");
             HandleMovement();
-            
+
         }
 
     }
@@ -284,7 +285,7 @@ public class Udp_take : MonoBehaviour
                 }
                 else
                 {
-                    translationAmount = new Vector3(0.0f, z / 2000, 0.0f);
+                    translationAmount = new Vector3(0.0f, (z / 2000), 0.0f);
                     ROV.transform.Translate(translationAmount);
                 }
             }
@@ -302,10 +303,12 @@ public class Udp_take : MonoBehaviour
             ROV.transform.Translate(translationAmount);
         }
 
-        if (rc == 1)
+
+        if (rc == 1 && prevRc != 1)
         {
+
             float currentY = ROV.transform.eulerAngles.y;
-            if (!rotating && tr != 0f && prevRc != 1)
+            if (!rotating && tr != 0f)
             {
                 target_rotation = (currentY + tr) % 360;
                 rotation_angle = tr;
@@ -327,6 +330,9 @@ public class Udp_take : MonoBehaviour
                     rotation_angle = 0f;
                     ROV.transform.rotation = Quaternion.Euler(0, newY, 0);
 
+                    receivedShorts[6] = 0;
+                    receivedShorts[7] = 0;
+
                 }
                 else
                 {
@@ -335,8 +341,8 @@ public class Udp_take : MonoBehaviour
 
                 }
             }
+            prevRc = rc;
         }
-        prevRc = rc;
     }
 
     private void CloseUDPListener()
@@ -360,10 +366,12 @@ public class Udp_take : MonoBehaviour
     {
         CloseUDPListener();
     }
+
     private float Map(float value, float inputMin, float inputMax, float outputMin, float outputMax)
     {
         return (inputMax - value) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin;
     }
+
     
 }
 
