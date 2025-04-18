@@ -46,8 +46,4 @@ public class RotationForM1 : MonoBehaviour
             ROV.transform.rotation = Quaternion.Euler(0, newY, 0);
         }
     }
-    float NormalizeAngle(float angle)
-    {
-        return ((360 - angle + 90) % 360);
-    }
 }

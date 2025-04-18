@@ -176,7 +176,6 @@ public class Udp_take : MonoBehaviour
     private float prevRc = 0f;
 
 
-
     void Start()
     {
         StartUDPListener(12345); // UDP portunu baþlat
@@ -314,43 +313,37 @@ public class Udp_take : MonoBehaviour
 
         if (rc == 1 && prevRc != 1)
         {
-
             float currentY = ROV.transform.eulerAngles.y;
-            if (!rotating && tr != 0f && prevRc != 1)
+            if (!rotating && tr != 0f)
             {
                 target_rotation = (currentY + tr) % 360;
                 rotation_angle = tr;
                 rotating = true;
-
-            }
-
-            if (rotating == true)
-            {
-                float shortestAngle = Mathf.DeltaAngle(currentY, target_rotation);
-                float rotation_step = rotationSpeed * Time.deltaTime;
-
-                float newY;
-
-                if (Mathf.Abs(shortestAngle) < rotation_step)
-                {
-                    newY = target_rotation;
-                    rotating = false;
-                    rotation_angle = 0f;
-                    ROV.transform.rotation = Quaternion.Euler(0, newY, 0);
-
-                    receivedShorts[6] = 0;
-                    receivedShorts[7] = 0;
-
-                }
-                else
-                {
-                    newY = currentY + Mathf.Sign(shortestAngle) * rotation_step;
-                    ROV.transform.rotation = Quaternion.Euler(0, newY, 0);
-
-                }
             }
         }
-        prevRc = 0;
+        if (rotating == true)
+        {
+            float currentY = ROV.transform.eulerAngles.y;
+            float shortestAngle = Mathf.DeltaAngle(currentY, target_rotation);
+            float rotation_step = rotationSpeed * Time.deltaTime;
+
+            float newY;
+
+            if (Mathf.Abs(shortestAngle) < rotation_step)
+            {
+                newY = target_rotation;
+                ROV.transform.rotation = Quaternion.Euler(0, newY, 0);
+                rotating = false;
+                rotation_angle = 0f;                   
+            }
+            else
+            {
+                newY = currentY + Mathf.Sign(shortestAngle) * rotation_step;
+                ROV.transform.rotation = Quaternion.Euler(0, newY, 0);
+
+            }
+        }
+        prevRc = rc;
     }
 
     private void CloseUDPListener()
