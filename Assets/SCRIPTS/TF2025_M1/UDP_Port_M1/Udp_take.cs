@@ -173,8 +173,8 @@ public class Udp_take : MonoBehaviour
     public float rotation_angle = 0f; // We will get this variable from Python side             
     private float target_rotation = 0f;
     private bool rotating = false;
-
     private float prevRc = 0f;
+
 
 
     void Start()
@@ -273,9 +273,15 @@ public class Udp_take : MonoBehaviour
 
             if (Mathf.Abs(ROV.transform.position.y - simDepth) > tolerance)
             {
+                // Derinlik farký toleransýn üzerindeyse hareket et
                 if (ROV.transform.position.y > simDepth && z > 0f)
                 {
                     translationAmount = new Vector3(0.0f, (-1 * z) / 2000, 0.0f);
+                    ROV.transform.Translate(translationAmount);
+                }
+                else if (ROV.transform.position.y > simDepth && z <= 0f)
+                {
+                    translationAmount = new Vector3(0.0f, z / 2000, 0.0f);
                     ROV.transform.Translate(translationAmount);
                 }
                 else if (ROV.transform.position.y < simDepth && z < 0f)
@@ -283,18 +289,20 @@ public class Udp_take : MonoBehaviour
                     translationAmount = new Vector3(0.0f, (-1 * z) / 2000, 0.0f);
                     ROV.transform.Translate(translationAmount);
                 }
-                else
+                else if (ROV.transform.position.y < simDepth && z >= 0f)
                 {
-                    translationAmount = new Vector3(0.0f, (z / 2000), 0.0f);
+                    translationAmount = new Vector3(0.0f, z / 2000, 0.0f);
                     ROV.transform.Translate(translationAmount);
                 }
             }
             else
             {
+                // Derinlik farký tolerans içindeyse sadece Y eksenini sabitle
                 ROV.transform.position = new Vector3(
-                    ROV.transform.position.x,
-                    simDepth,
-                    ROV.transform.position.z);
+                    ROV.transform.position.x,  // X ekseninde hareket serbest
+                    simDepth,                  // Y ekseni sabitleniyor
+                    ROV.transform.position.z   // Z ekseninde hareket serbest
+                );
             }
         }
         else
@@ -308,7 +316,7 @@ public class Udp_take : MonoBehaviour
         {
 
             float currentY = ROV.transform.eulerAngles.y;
-            if (!rotating && tr != 0f)
+            if (!rotating && tr != 0f && prevRc != 1)
             {
                 target_rotation = (currentY + tr) % 360;
                 rotation_angle = tr;
@@ -341,8 +349,8 @@ public class Udp_take : MonoBehaviour
 
                 }
             }
-            prevRc = rc;
         }
+        prevRc = rc;
     }
 
     private void CloseUDPListener()
