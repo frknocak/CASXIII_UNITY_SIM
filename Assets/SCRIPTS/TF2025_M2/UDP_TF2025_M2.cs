@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Threading;
 
 
 using System.Net;
+using System.Threading;
+using System;
 using UnityEngine;
 using Unity.VisualScripting;
 using System;
@@ -14,6 +14,7 @@ public class UDP_TF2025_M2 : MonoBehaviour
     private UdpClient udpClient;
     private Thread receiveThread;
     private bool isReceiving = false;
+
     private short[] receivedShorts = new short[6];
 
     public ROV_lowerThrusters rov_LowerThrusters;
@@ -25,12 +26,34 @@ public class UDP_TF2025_M2 : MonoBehaviour
     public float movementSpeed;
 
     public Vector3 translationAmount;
-    private float rotationAmount = 1f; //Her bir veride kaç derece dönecek
+    private float rotationAmount = 1f; //Her bir veride kaÃ§ derece dÃ¶necek
 
     void Start()
     {
         StartUDPListener(12345);
-        translationAmount = new Vector3(0.0f, 0.015f, 0.0f); //Her bir veride ne kadar yukarý çýkacak
+        translationAmount = new Vector3(0.0f, 0.015f, 0.0f); //Her bir veride ne kadar yukarÃ½ Ã§Ã½kacak
+
+    private short[] receivedShorts = new short[6]; // 6 elemanlÃ½ short array
+
+    public GameObject ROV;
+    public float movementSpeed;
+    private Vector3 translationAmount;
+    private float rotationAmount = 1f; // Her bir veride kaÃ§ derece dÃ¶necek
+
+    void Start()
+    {
+        StartUDPListener(12345); // UDP portunu baÃ¾lat
+        translationAmount = new Vector3(0.0f, 0.015f, 0.0f); // Hareket miktarÃ½
+    }
+
+    void Update()
+    {
+        // AlÃ½nan verileri ekrana yazdÃ½r
+        if (receivedShorts != null)
+        {
+            Debug.Log($"AlÃ½nan Short DeÃ°erler: {string.Join(", ", receivedShorts)}");
+            HandleMovement();
+        }
 
     }
 
@@ -38,7 +61,7 @@ public class UDP_TF2025_M2 : MonoBehaviour
     {
         if (udpClient != null)
         {
-            CloseUDPListener(); // Eðer eski baðlantý açýksa kapat
+            CloseUDPListener(); // EÃ°er eski baÃ°lantÃ½ aÃ§Ã½ksa kapat
         }
 
         udpClient = new UdpClient(port);
@@ -50,6 +73,7 @@ public class UDP_TF2025_M2 : MonoBehaviour
     }
 
     private void ReceiveData()
+
     {
         IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 12345);
 
@@ -58,7 +82,7 @@ public class UDP_TF2025_M2 : MonoBehaviour
             try
             {
                 byte[] receivedBytes = udpClient.Receive(ref remoteEndPoint);
-                Debug.Log($"UDP Veri Alýndý, {receivedBytes.Length} byte");
+                Debug.Log($"UDP Veri AlÃ½ndÃ½, {receivedBytes.Length} byte");
 
                 if (receivedBytes.Length == 12) // 6 * 2 byte (short)
                 {
@@ -75,12 +99,12 @@ public class UDP_TF2025_M2 : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning("Hatalý veri boyutu!");
+                    Debug.LogWarning("HatalÃ½ veri boyutu!");
                 }
             }
             catch (SocketException e)
             {
-                Debug.LogError("UDP Alým Hatasý: " + e.Message);
+                Debug.LogError("UDP AlÃ½m HatasÃ½: " + e.Message);
                 isReceiving = false;
             }
         }
@@ -88,14 +112,50 @@ public class UDP_TF2025_M2 : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // Alýnan verileri ekrana yazdýr
+        // AlÃ½nan verileri ekrana yazdÃ½r
         if (receivedShorts != null)
         {
-            Debug.Log($"Alýnan Short Deðerler: {string.Join(", ", receivedShorts)}");
+            Debug.Log($"AlÃ½nan Short DeÃ°erler: {string.Join(", ", receivedShorts)}");
             HandleMovement();
 
         }
     }
+    {
+        IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 12345);
+
+        while (isReceiving)
+        {
+            try
+            {
+                byte[] receivedBytes = udpClient.Receive(ref remoteEndPoint);
+                Debug.Log($"UDP Veri AlÃ½ndÃ½, {receivedBytes.Length} byte");
+
+                if (receivedBytes.Length == 12) // 6 * 2 byte (short)
+                {
+                    short[] tempArray = new short[6];
+                    for (int i = 0; i < 6; i++)
+                    {
+                        tempArray[i] = BitConverter.ToInt16(receivedBytes, i * 2);
+                    }
+
+                    lock (receivedShorts)
+                    {
+                        receivedShorts = tempArray;
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning("HatalÃ½ veri boyutu!");
+                }
+            }
+            catch (SocketException e)
+            {
+                Debug.LogError("UDP AlÃ½m HatasÃ½: " + e.Message);
+                isReceiving = false;
+            }
+        }
+    }
+
     private void HandleMovement()
     {
         float x = receivedShorts[0];
@@ -109,26 +169,28 @@ public class UDP_TF2025_M2 : MonoBehaviour
         ROV.transform.Translate(Vector3.forward * Time.deltaTime * y / 9.5f);
         ROV.transform.Translate(Vector3.right * Time.deltaTime * x / 20);
 
+
+        ROV.transform.Translate(Vector3.forward * Time.deltaTime * y / 9.5f);
+        ROV.transform.Translate(Vector3.right * Time.deltaTime * x / 20);
+
         rotationAmount = h / 50;
         ROV.transform.Rotate(Vector3.up, rotationAmount);
 
         if (r == 1)
         {
             float target_depth = k / 10;
-            float tolerance = 0.05f; // Tolerans deðeri
+
+            float tolerance = 0.05f; // Tolerans deÃ°eri
             float simDepth = Map(target_depth, 0f, 20f, -28f, -0.6f);
+            float tolerance = 0.05f;
+            float simDepth = Map(target_depth, 0f, 20f, -37f, -0.6f);
+
 
             if (Mathf.Abs(ROV.transform.position.y - simDepth) > tolerance)
             {
-                // Derinlik farký toleransýn üzerindeyse hareket et
                 if (ROV.transform.position.y > simDepth && z > 0f)
                 {
                     translationAmount = new Vector3(0.0f, (-1 * z) / 2000, 0.0f);
-                    ROV.transform.Translate(translationAmount);
-                }
-                else if (ROV.transform.position.y > simDepth && z <= 0f)
-                {
-                    translationAmount = new Vector3(0.0f, z / 2000, 0.0f);
                     ROV.transform.Translate(translationAmount);
                 }
                 else if (ROV.transform.position.y < simDepth && z < 0f)
@@ -136,7 +198,7 @@ public class UDP_TF2025_M2 : MonoBehaviour
                     translationAmount = new Vector3(0.0f, (-1 * z) / 2000, 0.0f);
                     ROV.transform.Translate(translationAmount);
                 }
-                else if (ROV.transform.position.y < simDepth && z >= 0f)
+                else
                 {
                     translationAmount = new Vector3(0.0f, z / 2000, 0.0f);
                     ROV.transform.Translate(translationAmount);
@@ -144,11 +206,10 @@ public class UDP_TF2025_M2 : MonoBehaviour
             }
             else
             {
-                // Derinlik farký tolerans içindeyse sadece Y eksenini sabitle
                 ROV.transform.position = new Vector3(
-                    ROV.transform.position.x,  // X ekseninde hareket serbest
-                    simDepth,                  // Y ekseni sabitleniyor
-                    ROV.transform.position.z   // Z ekseninde hareket serbest
+                    ROV.transform.position.x,
+                    simDepth,
+                    ROV.transform.position.z
                 );
             }
         }
@@ -157,7 +218,23 @@ public class UDP_TF2025_M2 : MonoBehaviour
             translationAmount = new Vector3(0.0f, z / 2000, 0.0f);
             ROV.transform.Translate(translationAmount);
         }
+    }
 
+    private void CloseUDPListener()
+    {
+        isReceiving = false;
+
+        if (udpClient != null)
+        {
+            udpClient.Close();
+            udpClient = null;
+        }
+
+        if (receiveThread != null && receiveThread.IsAlive)
+        {
+            receiveThread.Abort();
+            receiveThread = null;
+        }
     }
 
     private void CloseUDPListener()
@@ -180,10 +257,17 @@ public class UDP_TF2025_M2 : MonoBehaviour
     private void OnDestroy()
     {
         CloseUDPListener();
+
     }
 
     float Map(float value, float inputMin, float inputMax, float outputMin, float outputMax)
     {
         return (value - inputMin) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin;
+
+    }
+    private float Map(float value, float inputMin, float inputMax, float outputMin, float outputMax)
+    {
+        return (inputMax - value) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin;
     }
 }
+
