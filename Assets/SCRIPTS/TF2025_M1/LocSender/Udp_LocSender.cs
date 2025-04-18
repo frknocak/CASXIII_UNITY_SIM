@@ -132,14 +132,20 @@ public class Udp_LocSender : MonoBehaviour
         byte[] data = Encoding.UTF8.GetBytes(message);
 
         udpClient.Send(data, data.Length, targetEndPoint);
-        Debug.Log($"Gönderilen Pozisyon: x = {x_val}, y = {y_val}, head = {head_val} , h= {calculated_depth}");
+        //Debug.Log($"Gönderilen Pozisyon: x = {x_val}, y = {y_val}, head = {head_val} , h= {calculated_depth}");
     }
 
     private float HeadValueForPyhtonCoordinates()
     {
         float simAngle = rov.transform.rotation.eulerAngles.y;
-        float pyAngle = (360 - simAngle + 90) % 360;
-        return pyAngle;
+        float triAngle = 360 - simAngle + 90;
+
+        if (triAngle > 360)
+        {
+            float tolerans = triAngle - 360;
+            triAngle = tolerans;
+        }
+        return triAngle;
     }
 
     private float Map(float value, float inputMin, float inputMax, float outputMin, float outputMax)
