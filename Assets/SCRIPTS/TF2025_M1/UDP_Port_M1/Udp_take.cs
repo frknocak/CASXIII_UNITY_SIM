@@ -350,7 +350,7 @@ public class Udp_take : MonoBehaviour
                 }
             }
         }
-        prevRc = rc;
+        prevRc = 0;
     }
 
     private void CloseUDPListener()

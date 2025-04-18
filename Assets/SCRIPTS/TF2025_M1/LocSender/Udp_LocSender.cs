@@ -132,7 +132,7 @@ public class Udp_LocSender : MonoBehaviour
         byte[] data = Encoding.UTF8.GetBytes(message);
 
         udpClient.Send(data, data.Length, targetEndPoint);
-        Debug.Log($"Gönderilen Pozisyon: x = {x_val}, y = {y_val}, head = {head_val} , h= {calculated_depth}");
+        //Debug.Log($"Gönderilen Pozisyon: x = {x_val}, y = {y_val}, head = {head_val} , h= {calculated_depth}");
     }
 
     private float HeadValueForPyhtonCoordinates()
