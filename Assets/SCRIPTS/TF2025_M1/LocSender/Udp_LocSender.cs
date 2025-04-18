@@ -138,8 +138,14 @@ public class Udp_LocSender : MonoBehaviour
     private float HeadValueForPyhtonCoordinates()
     {
         float simAngle = rov.transform.rotation.eulerAngles.y;
-        float pyAngle = (360 - simAngle + 90) % 360;
-        return pyAngle;
+        float triAngle = 360 - simAngle + 90;
+
+        if (triAngle > 360)
+        {
+            float tolerans = triAngle - 360;
+            triAngle = tolerans;
+        }
+        return triAngle;
     }
 
     private float Map(float value, float inputMin, float inputMax, float outputMin, float outputMax)
