@@ -10,8 +10,9 @@ public class UDP_TF2025_M2 : MonoBehaviour
     private UdpClient udpClient;
     private Thread receiveThread;
     private bool isReceiving = false;
-
     private short[] receivedShorts = new short[6]; //6 elemanlı short array
+    private DateTime lastReceivedTime;
+    private float timeoutSeconds = 0.8f;
 
     public ROV_lowerThrusters rov_LowerThrusters;
     public GameObject ROV;
@@ -32,6 +33,12 @@ public class UDP_TF2025_M2 : MonoBehaviour
 
     void FixedUpdate()
     {
+        if ((DateTime.Now - lastReceivedTime).TotalSeconds > timeoutSeconds)
+        {
+            // Zaman aşımı oldu, hareketi durdur
+            Debug.LogWarning("UDP veri zaman aşımına uğradı. ROV hareketi durduruluyor.");
+            return;
+        }
         // Alinan verileri ekrana yazdýr
         if (receivedShorts != null)
         {
@@ -79,6 +86,7 @@ public class UDP_TF2025_M2 : MonoBehaviour
                     lock (receivedShorts)
                     {
                         receivedShorts = tempArray;
+                        lastReceivedTime = DateTime.Now;
                     }
                 }
                 else
