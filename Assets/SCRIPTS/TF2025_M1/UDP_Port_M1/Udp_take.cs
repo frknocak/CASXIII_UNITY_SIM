@@ -190,6 +190,7 @@ public class Udp_take : MonoBehaviour
         {
             // Zaman aþýmý oldu, hareketi durdur
             Debug.LogWarning("UDP veri zaman aþýmýna uðradý. ROV hareketi durduruluyor.");
+            prevRc = 0f;
             return;
         }
         // Alýnan verileri ekrana yazdýr
