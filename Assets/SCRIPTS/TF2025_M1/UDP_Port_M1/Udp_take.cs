@@ -163,6 +163,8 @@ public class Udp_take : MonoBehaviour
     private Thread receiveThread;
     private bool isReceiving = false;
     private short[] receivedShorts = new short[8]; // 8 elemanlý short array
+    private DateTime lastReceivedTime;
+    private float timeoutSeconds = 0.8f;
 
     public GameObject ROV;
     public float movementSpeed;
@@ -184,6 +186,12 @@ public class Udp_take : MonoBehaviour
 
     void FixedUpdate()
     {
+        if ((DateTime.Now - lastReceivedTime).TotalSeconds > timeoutSeconds)
+        {
+            // Zaman aþýmý oldu, hareketi durdur
+            Debug.LogWarning("UDP veri zaman aþýmýna uðradý. ROV hareketi durduruluyor.");
+            return;
+        }
         // Alýnan verileri ekrana yazdýr
         if (receivedShorts != null)
         {
@@ -232,6 +240,7 @@ public class Udp_take : MonoBehaviour
                     lock (receivedShorts)
                     {
                         receivedShorts = tempArray;
+                        lastReceivedTime = DateTime.Now;
                     }
                 }
                 else
