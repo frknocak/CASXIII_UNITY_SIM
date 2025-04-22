@@ -88,7 +88,7 @@ public class imgToByte : MonoBehaviour {
 
     void Start() {
       if(StartRecording){
-            InvokeRepeating("TakeScreenshots", 1f, 0.1f);
+            InvokeRepeating("TakeScreenshots", 1f, 2f);
             
       }
      }
