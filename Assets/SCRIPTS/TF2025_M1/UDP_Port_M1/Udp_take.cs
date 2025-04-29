@@ -167,11 +167,11 @@ public class Udp_take : MonoBehaviour
             ROV.transform.Translate(translationAmount);
         }
 
-        if (rc == 1 && !rotating )
+        if (rc == 1 && prevRc != 1)
         {
             float currentY = ROV.transform.eulerAngles.y;
 
-            if (tr != 0f)
+            if (!rotating && tr != 0f)
             {
                 rotation_angle = -tr;
                 target_rotation = (currentY + rotation_angle) % 360;
@@ -180,6 +180,11 @@ public class Udp_take : MonoBehaviour
                     target_rotation += 360f;
                 }
                 rotating = true;
+                prevRc = rc;
+                //if (transform.rotation.eulerAngles.y == target_rotation)
+                //{
+                //    rotating = false;
+                //}
             }
         }
         if (rotating == true)
@@ -198,6 +203,8 @@ public class Udp_take : MonoBehaviour
                 rotating = false;
                 rotation_angle = 0f;
 
+                prevRc = rc;
+
             }
             else
             {
@@ -206,7 +213,7 @@ public class Udp_take : MonoBehaviour
 
             }
         }
-        //prevRc = rc;
+
     }
 
     private void CloseUDPListener()
