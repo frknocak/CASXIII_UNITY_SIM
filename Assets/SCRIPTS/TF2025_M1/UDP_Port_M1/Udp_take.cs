@@ -208,6 +208,7 @@ public class Udp_take : MonoBehaviour
                 ROV.transform.rotation = Quaternion.Euler(0, newY, 0);
 
             }
+            prevRc = 0f;
         }
 
     }
