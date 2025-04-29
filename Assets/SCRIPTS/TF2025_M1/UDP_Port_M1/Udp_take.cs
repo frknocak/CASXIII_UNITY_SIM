@@ -189,7 +189,6 @@ public class Udp_take : MonoBehaviour
             float shortestAngle = Mathf.DeltaAngle(currentY, target_rotation);
             float rotation_step = rotationSpeed * Time.deltaTime;
 
-
             float newY;
 
             if (Mathf.Abs(shortestAngle) <= rotation_step || Mathf.Abs(shortestAngle) <= 1f)
@@ -200,7 +199,6 @@ public class Udp_take : MonoBehaviour
                 rotation_angle = 0f;
 
                 prevRc = rc;
-
             }
             else
             {
@@ -208,9 +206,8 @@ public class Udp_take : MonoBehaviour
                 ROV.transform.rotation = Quaternion.Euler(0, newY, 0);
 
             }
-            prevRc = 0f;
         }
-
+        prevRc = rc;
     }
 
     private void CloseUDPListener()
