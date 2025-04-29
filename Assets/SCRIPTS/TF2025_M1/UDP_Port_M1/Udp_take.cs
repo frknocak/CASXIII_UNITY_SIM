@@ -1,4 +1,4 @@
-using System.Net.Sockets;
+ï»¿using System.Net.Sockets;
 using System.Net;
 using System.Threading;
 using System;
@@ -9,14 +9,14 @@ public class Udp_take : MonoBehaviour
     private UdpClient udpClient;
     private Thread receiveThread;
     private bool isReceiving = false;
-    private short[] receivedShorts = new short[8]; // 8 elemanlý short array
+    private short[] receivedShorts = new short[8]; // 8 elemanlÄ± short array
     private DateTime lastReceivedTime;
     private float timeoutSeconds = 0.8f;
 
     public GameObject ROV;
     public float movementSpeed;
     private Vector3 translationAmount;
-    private float rotationAmount = 1f; // Her bir veride kaç derece dönecek
+    private float rotationAmount = 1f; // Her bir veride kaÃ§ derece dÃ¶necek
 
     public float rotationSpeed = 45.0f;                                             /*This part for the rotation controller function*/
     public float rotation_angle = 0f; // We will get this variable from Python side             
@@ -27,23 +27,23 @@ public class Udp_take : MonoBehaviour
 
     void Start()
     {
-        StartUDPListener(12345); // UDP portunu baþlat
-        translationAmount = new Vector3(0.0f, 0.015f, 0.0f); // Hareket miktarý
+        StartUDPListener(12345); // UDP portunu baÅŸlat
+        translationAmount = new Vector3(0.0f, 0.015f, 0.0f); // Hareket miktarÄ±
     }
 
     void FixedUpdate()
     {
         if ((DateTime.Now - lastReceivedTime).TotalSeconds > timeoutSeconds)
         {
-            // Zaman aþýmý oldu, hareketi durdur
-            Debug.LogWarning("UDP veri zaman aþýmýna uðradý. ROV hareketi durduruluyor.");
+            // Zaman aÅŸÄ±mÄ± oldu, hareketi durdur
+            Debug.LogWarning("UDP veri zaman aÅŸÄ±mÄ±na uÄŸradÄ±. ROV hareketi durduruluyor.");
             prevRc = 0f;
             return;
         }
-        // Alýnan verileri ekrana yazdýr
+        // AlÄ±nan verileri ekrana yazdÄ±r
         if (receivedShorts != null)
         {
-            Debug.Log($"Alýnan Short Deðerler: {string.Join(", ", receivedShorts)}");
+            Debug.Log($"AlÄ±nan Short DeÄŸerler: {string.Join(", ", receivedShorts)}");
             HandleMovement();
 
         }
@@ -55,7 +55,7 @@ public class Udp_take : MonoBehaviour
     {
         if (udpClient != null)
         {
-            CloseUDPListener(); // Eðer eski baðlantý açýksa kapat
+            CloseUDPListener(); // EÄŸer eski baÄŸlantÄ± aÃ§Ä±ksa kapat
         }
 
         udpClient = new UdpClient(port);
@@ -75,7 +75,7 @@ public class Udp_take : MonoBehaviour
             try
             {
                 byte[] receivedBytes = udpClient.Receive(ref remoteEndPoint);
-                Debug.Log($"UDP Veri Alýndý, {receivedBytes.Length} byte");
+                Debug.Log($"UDP Veri AlÄ±ndÄ±, {receivedBytes.Length} byte");
 
                 if (receivedBytes.Length == 16) // 8 * 2 byte (short)
                 {
@@ -93,12 +93,12 @@ public class Udp_take : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning("Hatalý veri boyutu!");
+                    Debug.LogWarning("HatalÄ± veri boyutu!");
                 }
             }
             catch (SocketException e)
             {
-                Debug.LogError("UDP Alým Hatasý: " + e.Message);
+                Debug.LogError("UDP AlÄ±m HatasÄ±: " + e.Message);
                 isReceiving = false;
             }
         }
@@ -129,7 +129,7 @@ public class Udp_take : MonoBehaviour
 
             if (Mathf.Abs(ROV.transform.position.y - simDepth) > tolerance)
             {
-                // Derinlik farký toleransýn üzerindeyse hareket et
+                // Derinlik farkÄ± toleransÄ±n Ã¼zerindeyse hareket et
                 if (ROV.transform.position.y > simDepth && z > 0f)
                 {
                     translationAmount = new Vector3(0.0f, (-1 * z) / 2000, 0.0f);
@@ -153,7 +153,7 @@ public class Udp_take : MonoBehaviour
             }
             else
             {
-                // Derinlik farký tolerans içindeyse sadece Y eksenini sabitle
+                // Derinlik farkÄ± tolerans iÃ§indeyse sadece Y eksenini sabitle
                 ROV.transform.position = new Vector3(
                     ROV.transform.position.x,  // X ekseninde hareket serbest
                     simDepth,                  // Y ekseni sabitleniyor
@@ -181,10 +181,6 @@ public class Udp_take : MonoBehaviour
                 }
                 rotating = true;
                 prevRc = rc;
-                //if (transform.rotation.eulerAngles.y == target_rotation)
-                //{
-                //    rotating = false;
-                //}
             }
         }
         if (rotating == true)
