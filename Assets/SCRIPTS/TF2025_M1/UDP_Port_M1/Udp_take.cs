@@ -170,7 +170,6 @@ public class Udp_take : MonoBehaviour
         if (rc == 1 && prevRc != 1 )
         {
             float currentY = ROV.transform.eulerAngles.y;
-            Debug.Log($"[Baþlangýç] Dönüþ komutu alýndý. currentY: {currentY}, tr: {tr}");
             if (!rotating && tr != 0f)
             {
                 rotation_angle = -tr;
@@ -179,7 +178,6 @@ public class Udp_take : MonoBehaviour
                 {
                     target_rotation += 360f;
                 }
-                Debug.Log($"[Hedef] target_rotation ayarlandý: {target_rotation}");
                 rotating = true;
                 prevRc = rc;
             }
@@ -190,7 +188,6 @@ public class Udp_take : MonoBehaviour
             float shortestAngle = Mathf.DeltaAngle(currentY, target_rotation);
             float rotation_step = rotationSpeed * Time.deltaTime;
 
-            Debug.Log($"[Dönüþ] currentY: {currentY}, target_rotation: {target_rotation}, shortestAngle: {shortestAngle}");
 
             float newY;
 
@@ -200,7 +197,7 @@ public class Udp_take : MonoBehaviour
                 ROV.transform.rotation = Quaternion.Euler(0, newY, 0);
                 rotating = false;
                 rotation_angle = 0f;
-                Debug.Log($"[Bitiþ] Dönüþ tamamlandý. Final Y: {newY}");
+
                 prevRc = rc;
             }
             else
