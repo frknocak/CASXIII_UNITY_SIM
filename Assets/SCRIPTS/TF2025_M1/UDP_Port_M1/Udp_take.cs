@@ -11,7 +11,7 @@ public class Udp_take : MonoBehaviour
     private bool isReceiving = false;
     private short[] receivedShorts = new short[8]; // 8 elemanlı short array
     private DateTime lastReceivedTime;
-    private float timeoutSeconds = 0.8f;
+    private float timeoutSeconds = 15f;
 
     public GameObject ROV;
     public float movementSpeed;
