@@ -5,12 +5,18 @@ public class RadarScanner : MonoBehaviour
     public float scanRange = 10f;
     public int numberOfRays = 60;
     public float rotationSpeed = 30f;
+    [HideInInspector] public float starting_rotation;
 
     public RadarUI radarUI; // RadarUI scriptine baðlan
 
+    private void Start()
+    {
+        starting_rotation = transform.eulerAngles.y;
+    }
+
     void Update()
     {
-        transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);
+        transform.Rotate((-1)*Vector3.up * rotationSpeed * Time.deltaTime);
 
         float angleStep = 360f / numberOfRays;
 
