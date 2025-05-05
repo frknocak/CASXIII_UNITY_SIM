@@ -1,0 +1,1 @@
+Hesaplanan açı değeri: O noktadaki normal ile ray'in yönü arasındaki açı hesaplanıyor.
