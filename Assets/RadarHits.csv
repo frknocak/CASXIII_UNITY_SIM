@@ -1,0 +1,137 @@
+Step,ObjectName,Tag,HitPositionX,HitPositionY,HitPositionZ,Distance
+7,Cube,Untagged,0,42,1,57,54,41,4,42
+8,Cube,Untagged,0,42,1,57,53,77,3,79
+9,Cube,Untagged,0,42,1,57,53,30,3,32
+10,Cube,Untagged,0,42,1,57,52,93,2,96
+11,Cube,Untagged,0,42,1,57,52,63,2,66
+12,Cube,Untagged,0,42,1,57,52,39,2,42
+13,Cube,Untagged,0,44,1,57,52,29,2,33
+14,Cube,Untagged,0,47,1,57,52,29,2,33
+15,Cube,Untagged,0,51,1,57,52,29,2,34
+16,Cube,Untagged,0,55,1,57,52,29,2,35
+17,Cube,Untagged,0,59,1,57,52,29,2,36
+18,Cube,Untagged,0,63,1,57,52,29,2,37
+19,Cube,Untagged,0,66,1,57,52,29,2,38
+20,Cube,Untagged,0,70,1,57,52,29,2,39
+21,Cube,Untagged,0,74,1,57,52,29,2,40
+22,Cube,Untagged,0,78,1,57,52,29,2,42
+23,Cube,Untagged,0,82,1,57,52,29,2,43
+24,Cube,Untagged,0,86,1,57,52,29,2,44
+25,Cube,Untagged,0,91,1,57,52,29,2,46
+26,Cube,Untagged,0,95,1,57,52,29,2,47
+27,Cube,Untagged,0,99,1,57,52,29,2,49
+28,Cube,Untagged,1,03,1,57,52,29,2,51
+29,Cube,Untagged,1,08,1,57,52,29,2,53
+30,Cube,Untagged,1,12,1,57,52,29,2,55
+31,Cube,Untagged,1,16,1,57,52,29,2,57
+32,Cube,Untagged,1,21,1,57,52,29,2,59
+33,Cube,Untagged,1,26,1,57,52,29,2,61
+34,Cube,Untagged,1,30,1,57,52,29,2,63
+35,Cube,Untagged,1,35,1,57,52,29,2,66
+36,Cube,Untagged,1,40,1,57,52,29,2,68
+37,Cube,Untagged,1,45,1,57,52,29,2,71
+38,Cube,Untagged,1,50,1,57,52,29,2,74
+39,Cube,Untagged,1,55,1,57,52,29,2,76
+40,Cube,Untagged,1,61,1,57,52,29,2,79
+41,Cube,Untagged,1,66,1,57,52,29,2,83
+42,Cube,Untagged,1,72,1,57,52,29,2,86
+43,Cube,Untagged,1,77,1,57,52,29,2,89
+44,Cube,Untagged,1,83,1,57,52,29,2,93
+45,Cube,Untagged,1,89,1,57,52,29,2,97
+46,Cube,Untagged,1,95,1,57,52,29,3,01
+47,Cube,Untagged,2,02,1,57,52,29,3,05
+48,Cube,Untagged,2,08,1,57,52,29,3,09
+49,Cube,Untagged,2,15,1,57,52,29,3,14
+50,Cube,Untagged,2,22,1,57,52,29,3,18
+51,Cube,Untagged,2,29,1,57,52,29,3,23
+52,Cube,Untagged,2,36,1,57,52,29,3,29
+53,Cube,Untagged,2,43,1,57,52,29,3,34
+54,Cube,Untagged,2,51,1,57,52,29,3,40
+55,Cube,Untagged,2,59,1,57,52,29,3,46
+56,Cube,Untagged,2,68,1,57,52,29,3,52
+57,Cube,Untagged,2,76,1,57,52,29,3,59
+58,Cube,Untagged,2,85,1,57,52,29,3,66
+111,Sphere,Untagged,4,26,1,57,49,33,4,31
+112,Sphere,Untagged,4,02,1,57,49,30,4,08
+113,Sphere,Untagged,3,85,1,57,49,27,3,92
+114,Sphere,Untagged,3,72,1,57,49,23,3,80
+115,Sphere,Untagged,3,62,1,57,49,19,3,71
+116,Sphere,Untagged,3,52,1,57,49,15,3,62
+117,Sphere,Untagged,3,44,1,57,49,12,3,55
+118,Sphere,Untagged,3,37,1,57,49,08,3,49
+119,Sphere,Untagged,3,30,1,57,49,04,3,43
+120,Sphere,Untagged,3,24,1,57,49,00,3,39
+121,Sphere,Untagged,3,18,1,57,48,97,3,34
+122,Sphere,Untagged,3,12,1,57,48,93,3,30
+123,Sphere,Untagged,3,07,1,57,48,89,3,27
+124,Sphere,Untagged,3,03,1,57,48,86,3,24
+125,Sphere,Untagged,2,98,1,57,48,82,3,21
+126,Sphere,Untagged,2,94,1,57,48,78,3,18
+127,Sphere,Untagged,2,90,1,57,48,75,3,16
+128,Sphere,Untagged,2,86,1,57,48,71,3,14
+129,Sphere,Untagged,2,82,1,57,48,67,3,12
+130,Sphere,Untagged,2,79,1,57,48,63,3,11
+131,Sphere,Untagged,2,75,1,57,48,60,3,09
+132,Sphere,Untagged,2,72,1,57,48,56,3,08
+133,Sphere,Untagged,2,69,1,57,48,52,3,07
+134,Sphere,Untagged,2,66,1,57,48,48,3,06
+135,Sphere,Untagged,2,63,1,57,48,44,3,06
+136,Sphere,Untagged,2,60,1,57,48,40,3,05
+137,Sphere,Untagged,2,58,1,57,48,36,3,05
+138,Sphere,Untagged,2,55,1,57,48,32,3,05
+139,Sphere,Untagged,2,53,1,57,48,28,3,05
+140,Sphere,Untagged,2,50,1,57,48,24,3,06
+141,Sphere,Untagged,2,48,1,57,48,20,3,06
+142,Sphere,Untagged,2,46,1,57,48,16,3,07
+143,Sphere,Untagged,2,43,1,57,48,11,3,08
+144,Sphere,Untagged,2,41,1,57,48,07,3,09
+145,Sphere,Untagged,2,39,1,57,48,02,3,11
+146,Sphere,Untagged,2,37,1,57,47,97,3,12
+147,Sphere,Untagged,2,35,1,57,47,92,3,14
+148,Sphere,Untagged,2,34,1,57,47,87,3,16
+149,Sphere,Untagged,2,32,1,57,47,82,3,18
+150,Sphere,Untagged,2,30,1,57,47,77,3,21
+151,Sphere,Untagged,2,29,1,57,47,71,3,24
+152,Sphere,Untagged,2,27,1,57,47,65,3,27
+153,Sphere,Untagged,2,26,1,57,47,59,3,30
+154,Sphere,Untagged,2,25,1,57,47,53,3,34
+155,Sphere,Untagged,2,24,1,57,47,46,3,39
+156,Sphere,Untagged,2,23,1,57,47,39,3,44
+157,Sphere,Untagged,2,23,1,57,47,31,3,49
+158,Sphere,Untagged,2,22,1,57,47,23,3,55
+159,Sphere,Untagged,2,22,1,57,47,14,3,63
+160,Sphere,Untagged,2,23,1,57,47,03,3,71
+161,Sphere,Untagged,2,24,1,57,46,92,3,81
+162,Sphere,Untagged,2,26,1,57,46,79,3,93
+163,Sphere,Untagged,2,30,1,57,46,62,4,08
+164,Sphere,Untagged,2,37,1,57,46,39,4,32
+231,Cube (1),Untagged,-2,38,1,57,45,33,5,24
+232,Cube (1),Untagged,-2,38,1,57,45,51,5,08
+233,Cube (1),Untagged,-2,38,1,57,45,68,4,94
+234,Cube (1),Untagged,-2,38,1,57,45,83,4,80
+235,Cube (1),Untagged,-2,38,1,57,45,98,4,67
+236,Cube (1),Untagged,-2,38,1,57,46,12,4,55
+237,Cube (1),Untagged,-2,38,1,57,46,25,4,44
+238,Cube (1),Untagged,-2,38,1,57,46,38,4,33
+239,Cube (1),Untagged,-2,38,1,57,46,50,4,23
+240,Cube (1),Untagged,-2,38,1,57,46,62,4,13
+241,Cube (1),Untagged,-2,38,1,57,46,73,4,05
+242,Cube (1),Untagged,-2,38,1,57,46,83,3,96
+243,Cube (1),Untagged,-2,38,1,57,46,93,3,88
+244,Cube (1),Untagged,-2,43,1,57,46,96,3,89
+245,Cube (1),Untagged,-2,51,1,57,46,96,3,94
+246,Cube (1),Untagged,-2,59,1,57,46,96,3,99
+247,Cube (1),Untagged,-2,68,1,57,46,96,4,05
+248,Cube (1),Untagged,-2,76,1,57,46,96,4,11
+249,Cube (1),Untagged,-2,85,1,57,46,96,4,17
+250,Cube (1),Untagged,-2,94,1,57,46,96,4,23
+251,Cube (1),Untagged,-3,04,1,57,46,96,4,30
+252,Cube (1),Untagged,-3,13,1,57,46,96,4,36
+253,Cube (1),Untagged,-3,23,1,57,46,96,4,44
+254,Cube (1),Untagged,-3,34,1,57,46,96,4,51
+255,Cube (1),Untagged,-3,45,1,57,46,96,4,59
+256,Cube (1),Untagged,-3,56,1,57,46,96,4,68
+257,Cube (1),Untagged,-3,67,1,57,46,96,4,77
+258,Cube (1),Untagged,-3,79,1,57,46,96,4,86
+259,Cube (1),Untagged,-3,92,1,57,46,96,4,96
+260,Cube (1),Untagged,-4,05,1,57,46,96,5,06
