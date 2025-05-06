@@ -10,7 +10,7 @@ TagManager:
   - smallArea
   - mediumArea
   - largeArea
-  - Enemy
+  - PoolWall
   layers:
   - Default
   - TransparentFX
